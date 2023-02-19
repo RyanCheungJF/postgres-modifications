@@ -214,9 +214,9 @@ void StrategyUpdateAccessedBuffer(int buf_id, bool delete)
 	{
 		// case C4, so we simply find and delete the LinkedListNode
 		// iterate the list to find the LinkedListNode we want to delete
-		while (curr->buffer_id != buf_id && curr->buffer_id != -1)
+		while (curr->buffer_id != buf_id && curr->right != -1)
 		{
-			curr = curr->right;
+			curr = &DoublyLinkedList[curr->right];
 		}
 
 		// found the LinkedListNode we want to delete
@@ -231,8 +231,8 @@ void StrategyUpdateAccessedBuffer(int buf_id, bool delete)
 		{
 			LinkedListNode *leftNode = &DoublyLinkedList[curr->left];
 			LinkedListNode *rightNode = &DoublyLinkedList[curr->right];
-			leftNode->right = rightNode;
-			rightNode->left = leftNode;
+			leftNode->right = rightNode->buffer_id;
+			rightNode->left = leftNode->buffer_id;
 		}
 	}
 	else
@@ -240,9 +240,9 @@ void StrategyUpdateAccessedBuffer(int buf_id, bool delete)
 		// could be either cases c1, c2, c3, so we check for c1 first
 		// it is case c1 or c3 if we can find our buffer inside the lru
 		// iterate the list to find if the LinkedListNode is insde
-		while (curr->buffer_id != buf_id && curr->buffer_id != -1)
+		while (curr->buffer_id != buf_id && curr->right != -1)
 		{
-			curr = curr->right;
+			curr = &DoublyLinkedList[curr->right];
 		}
 
 		// check if we have iterated to the end of the doubly linked list
@@ -251,8 +251,8 @@ void StrategyUpdateAccessedBuffer(int buf_id, bool delete)
 			// means c1 or c3, we found it in our buffer, so we simply move it to MRU
 			LinkedListNode *leftNode = &DoublyLinkedList[curr->left];
 			LinkedListNode *rightNode = &DoublyLinkedList[curr->right];
-			leftNode->right = rightNode;
-			rightNode->left = leftNode;
+			leftNode->right = rightNode->buffer_id;
+			rightNode->left = leftNode->buffer_id;
 			// put it at the head
 			curr->left = END_NODE;
 			curr->right = StrategyControl->headNode;
@@ -286,8 +286,8 @@ StrategyGetBuffer(BufferAccessStrategy strategy, uint32 *buf_state)
 {
 	BufferDesc *buf;
 	int bgwprocno;
-	int trycounter;
-	uint32 local_buf_state; /* to avoid repeated (de-)referencing */
+	uint32 local_buf_state;	  /* to avoid repeated (de-)referencing */
+	LinkedListNode *iterator; // to avoid the iso c90 warning, we declare here
 
 	/*
 	 * If given a strategy object, see whether it can select a buffer. We
@@ -387,7 +387,7 @@ StrategyGetBuffer(BufferAccessStrategy strategy, uint32 *buf_state)
 			{
 				if (strategy != NULL)
 					AddBufferToRing(strategy, buf);
-				// case C2, we take it from the free list
+				// case c2, we take it from the free list
 				// so we need to update it and put it at MRU
 				StrategyUpdateAccessedBuffer(buf->buf_id, false);
 				*buf_state = local_buf_state;
@@ -408,6 +408,7 @@ StrategyGetBuffer(BufferAccessStrategy strategy, uint32 *buf_state)
 		{
 			if (strategy != NULL)
 				AddBufferToRing(strategy, buf);
+			// case c3, freelist empty
 			StrategyUpdateAccessedBuffer(buf->buf_id, false);
 			return buf;
 		}
@@ -416,7 +417,7 @@ StrategyGetBuffer(BufferAccessStrategy strategy, uint32 *buf_state)
 			elog(ERROR, "no unpinned buffers available");
 			return NULL;
 		}
-		LinkedListNode *iterator = &DoublyLinkedList[buf->buf_id];
+		iterator = &DoublyLinkedList[buf->buf_id];
 		UnlockBufHdr(buf, local_buf_state);
 		buf = GetBufferDescriptor(iterator->left);
 	}
@@ -441,6 +442,7 @@ void StrategyFreeBuffer(BufferDesc *buf)
 		if (buf->freeNext < 0)
 			StrategyControl->lastFreeBuffer = buf->buf_id;
 		StrategyControl->firstFreeBuffer = buf->buf_id;
+		// case c4, free buffer from free list, so delete
 		StrategyUpdateAccessedBuffer(buf->buf_id, true);
 	}
 
@@ -539,6 +541,7 @@ Size StrategyShmemSize(void)
 void StrategyInitialize(bool init)
 {
 	bool found;
+	LinkedListNode *node; // declaration here again for ISO C90 warning
 
 	/*
 	 * Initialize the shared buffer lookup hashtable.
@@ -590,13 +593,13 @@ void StrategyInitialize(bool init)
 		Assert(!init);
 
 	// linked list structure
-	DoublyLinkedList = (Node *)ShmemInitStruct("Linked List Status", NBuffers * sizeof(LinkedListNode), &found);
+	DoublyLinkedList = (LinkedListNode *)ShmemInitStruct("Linked List Status", NBuffers * sizeof(LinkedListNode), &found);
 
 	// checks whether we managed to initialize
 	if (!found)
 	{
 		Assert(init);
-		LinkedListNode *node = DoublyLinkedList;
+		node = DoublyLinkedList;
 		for (int i = 0; i < NBuffers; i++)
 		{
 			node->left = END_NODE;

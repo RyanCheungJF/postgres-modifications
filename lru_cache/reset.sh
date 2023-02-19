@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 make clock
 ./start.sh
 ./stop.sh
