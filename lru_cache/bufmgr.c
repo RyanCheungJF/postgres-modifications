@@ -1173,7 +1173,6 @@ BufferAlloc(SMgrRelation smgr, char relpersistence, ForkNumber forkNum,
 		// Update the LRU stack for the found buffer
 		// For simplicity, we use the newPartitionLock for this update operation
 		StrategyUpdateAccessedBuffer(buf_id, false);
-
 		return buf;
 	}
 

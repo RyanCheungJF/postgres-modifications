@@ -209,61 +209,76 @@ bool have_free_buffer(void)
 // otherwise, delete buffer buf_id from the LRU stack.
 void StrategyUpdateAccessedBuffer(int buf_id, bool delete)
 {
-	LinkedListNode *curr = &DoublyLinkedList[StrategyControl->headNode];
+	LinkedListNode *curr = &DoublyLinkedList[buf_id];
 	if (delete)
 	{
 		// case C4, so we simply find and delete the LinkedListNode
-		// iterate the list to find the LinkedListNode we want to delete
-		while (curr->buffer_id != buf_id && curr->right != -1)
-		{
-			curr = &DoublyLinkedList[curr->right];
-		}
-
-		// found the LinkedListNode we want to delete
-		if (curr->buffer_id == StrategyControl->headNode)
+		if (buf_id == StrategyControl->headNode)
 		{
 			// if the LinkedListNode we want to delete is the head
 			LinkedListNode *rightNode = &DoublyLinkedList[curr->right];
 			rightNode->left = END_NODE;
 			StrategyControl->headNode = rightNode->buffer_id;
 		}
+		else if (buf_id == StrategyControl->tailNode)
+		{
+			// if the LinkedListNode we want to delete is the tail
+			LinkedListNode *leftNode = &DoublyLinkedList[curr->left];
+			leftNode->right = END_NODE;
+			StrategyControl->tailNode = leftNode->buffer_id;
+		}
 		else
 		{
+			// if the LinkedListNode we want to delete is in the middle
 			LinkedListNode *leftNode = &DoublyLinkedList[curr->left];
 			LinkedListNode *rightNode = &DoublyLinkedList[curr->right];
 			leftNode->right = rightNode->buffer_id;
 			rightNode->left = leftNode->buffer_id;
 		}
+		// reset curr left and right pointers to END so then we can tell it is unused
+		curr->left = END_NODE;
+		curr->right = END_NODE;
 	}
-	else
+	// if the buffer we are interested in is already in the head, then dont do anything
+	else if (!delete &&StrategyControl->headNode != buf_id)
 	{
-		// could be either cases c1, c2, c3, so we check for c1 first
-		// it is case c1 or c3 if we can find our buffer inside the lru
-		// iterate the list to find if the LinkedListNode is insde
-		while (curr->buffer_id != buf_id && curr->right != -1)
+		if (curr->left == END_NODE && curr->right == END_NODE)
 		{
-			curr = &DoublyLinkedList[curr->right];
-		}
-
-		// check if we have iterated to the end of the doubly linked list
-		if (curr->buffer_id != -1)
-		{
-			// means c1 or c3, we found it in our buffer, so we simply move it to MRU
-			LinkedListNode *leftNode = &DoublyLinkedList[curr->left];
-			LinkedListNode *rightNode = &DoublyLinkedList[curr->right];
-			leftNode->right = rightNode->buffer_id;
-			rightNode->left = leftNode->buffer_id;
-			// put it at the head
-			curr->left = END_NODE;
+			// case c2, buffer is not used, so not inside linkedlist, insert to front
 			curr->right = StrategyControl->headNode;
-			StrategyControl->headNode = curr->buffer_id;
+
+			if (StrategyControl->headNode != END_NODE)
+			{
+				LinkedListNode *headNode = &DoublyLinkedList[StrategyControl->headNode];
+				headNode->left = buf_id;
+			}
+			else
+			{
+				// if head is null, then update tail to curr
+				StrategyControl->tailNode = buf_id;
+			}
+			StrategyControl->headNode = buf_id;
 		}
 		else
 		{
-			// means c2, we insrt the buffer page from free list onto the top
-			LinkedListNode *newNode = &DoublyLinkedList[buf_id];
-			newNode->left = END_NODE;
-			newNode->right = StrategyControl->headNode;
+			// case c1 or c3, buffer exists in linkedList and we want to move it to MRU
+			if (buf_id == StrategyControl->tailNode)
+			{
+				// if tail, update tail to left
+				LinkedListNode *leftNode = &DoublyLinkedList[curr->left];
+				leftNode->right = END_NODE;
+				StrategyControl->tailNode = leftNode->buffer_id;
+			}
+			else if (buf_id != StrategyControl->headNode)
+			{
+				// middle of linked list
+				LinkedListNode *leftNode = &DoublyLinkedList[curr->left];
+				LinkedListNode *rightNode = &DoublyLinkedList[curr->right];
+				leftNode->right = rightNode->buffer_id;
+				rightNode->left = leftNode->buffer_id;
+			}
+			curr->right = StrategyControl->headNode;
+			curr->left = END_NODE;
 			StrategyControl->headNode = buf_id;
 		}
 	}
@@ -286,8 +301,9 @@ StrategyGetBuffer(BufferAccessStrategy strategy, uint32 *buf_state)
 {
 	BufferDesc *buf;
 	int bgwprocno;
-	uint32 local_buf_state;	  /* to avoid repeated (de-)referencing */
-	LinkedListNode *iterator; // to avoid the iso c90 warning, we declare here
+	uint32 local_buf_state; /* to avoid repeated (de-)referencing */
+	// iterate the linked list to find an avail node, starting from LRU
+	LinkedListNode *curr;
 
 	/*
 	 * If given a strategy object, see whether it can select a buffer. We
@@ -387,10 +403,10 @@ StrategyGetBuffer(BufferAccessStrategy strategy, uint32 *buf_state)
 			{
 				if (strategy != NULL)
 					AddBufferToRing(strategy, buf);
+				*buf_state = local_buf_state;
 				// case c2, we take it from the free list
 				// so we need to update it and put it at MRU
 				StrategyUpdateAccessedBuffer(buf->buf_id, false);
-				*buf_state = local_buf_state;
 				return buf;
 			}
 			UnlockBufHdr(buf, local_buf_state);
@@ -398,31 +414,49 @@ StrategyGetBuffer(BufferAccessStrategy strategy, uint32 *buf_state)
 	}
 
 	/* Nothing on the freelist, so run the LRU algorithm */
-	buf = GetBufferDescriptor(StrategyControl->tailNode);
+	SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
 
-	for (;;)
+	curr = &DoublyLinkedList[StrategyControl->tailNode];
+	// checks for a buffer not in used
+	while (curr->left != END_NODE && curr->right != END_NODE)
 	{
+		buf = GetBufferDescriptor(curr->buffer_id);
 		local_buf_state = LockBufHdr(buf);
 
+		/*
+		 * If the buffer is pinned or has a nonzero usage_count, we cannot use
+		 * it; decrement the usage_count (unless pinned) and keep scanning.
+		 */
 		if (BUF_STATE_GET_REFCOUNT(local_buf_state) == 0)
 		{
+
 			if (strategy != NULL)
 				AddBufferToRing(strategy, buf);
-			// case c3, freelist empty
+			*buf_state = local_buf_state;
+			// case c3, found from freelist
 			StrategyUpdateAccessedBuffer(buf->buf_id, false);
+			SpinLockRelease(&StrategyControl->buffer_strategy_lock);
 			return buf;
 		}
-		if (StrategyControl->headNode == buf->buf_id)
-		{
-			elog(ERROR, "no unpinned buffers available");
-			return NULL;
-		}
-		iterator = &DoublyLinkedList[buf->buf_id];
 		UnlockBufHdr(buf, local_buf_state);
-		buf = GetBufferDescriptor(iterator->left);
-	}
 
-	return NULL;
+		if (curr->left == END_NODE)
+		{
+			// we reached the head, so we don't want to go out of bounds
+			break;
+		}
+		// else, keep traversing left to find a suitable victim buffer
+		curr = &DoublyLinkedList[curr->left];
+	}
+	/*
+	 * We've scanned all the buffers without making any state changes,
+	 * so all the buffers are pinned (or were when we looked at them).
+	 * We could hope that someone will free one eventually, but it's
+	 * probably better to fail than to risk getting stuck in an
+	 * infinite loop.
+	 */
+	SpinLockRelease(&StrategyControl->buffer_strategy_lock);
+	elog(ERROR, "no unpinned buffers available");
 }
 
 /*
@@ -520,7 +554,7 @@ Size StrategyShmemSize(void)
 {
 	Size size = 0;
 
-	size = add_size(size, mul_size(NBuffers + NUM_BUFFER_PARTITIONS, sizeof(LinkedListNode)));
+	size = add_size(size, mul_size(NBuffers, sizeof(LinkedListNode)));
 
 	/* size of lookup hash table ... see comment in StrategyInitialize */
 	size = add_size(size, BufTableShmemSize(NBuffers + NUM_BUFFER_PARTITIONS));
@@ -595,6 +629,8 @@ void StrategyInitialize(bool init)
 	// linked list structure
 	DoublyLinkedList = (LinkedListNode *)ShmemInitStruct("Linked List Status", NBuffers * sizeof(LinkedListNode), &found);
 
+	StrategyControl->headNode = -1;
+	StrategyControl->tailNode = -1;
 	// checks whether we managed to initialize
 	if (!found)
 	{
