@@ -1,0 +1,230 @@
+ dropdbbuffers 
+---------------
+ t
+(1 row)
+
+ pg_stat_reset 
+---------------
+ 
+(1 row)
+
+BEGIN;
+BEGIN
+SET enable_bitmapscan = OFF;
+SET
+SET enable_seqscan = OFF;
+SET
+DROP INDEX b_idx;
+DROP INDEX
+DROP INDEX cb_idx;
+DROP INDEX
+EXPLAIN ANALYZE SELECT * FROM r WHERE b > 9 AND c = 10;
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Index Scan using c_idx on r  (cost=0.43..61014.65 rows=57043 width=32) (actual time=0.116..123.869 rows=57040 loops=1)
+   Index Cond: (c = 10)
+   Filter: (b > 9)
+   Rows Removed by Filter: 42960
+ Planning Time: 9.955 ms
+ Execution Time: 125.883 ms
+(6 rows)
+
+ROLLBACK;
+ROLLBACK
+ relname | heap_blks_read | heap_blks_hit | seq_scan | seq_tup_read 
+---------+----------------+---------------+----------+--------------
+ r       |          14688 |             0 |        0 |            0
+(1 row)
+
+ relname | indexrelname | idx_blks_read | idx_blks_hit | idx_scan | idx_tup_read | idx_tup_fetch 
+---------+--------------+---------------+--------------+----------+--------------+---------------
+ r       | r_pkey       |             1 |            0 |        0 |            0 |             0
+ r       | b_idx        |             0 |            0 |        0 |            0 |             0
+ r       | c_idx        |            88 |            0 |        1 |       100000 |        100000
+ r       | cb_idx       |             0 |            0 |        0 |            0 |             0
+(4 rows)
+
+ dropdbbuffers 
+---------------
+ t
+(1 row)
+
+ pg_stat_reset 
+---------------
+ 
+(1 row)
+
+BEGIN;
+BEGIN
+SET enable_bitmapscan = OFF;
+SET
+SET enable_seqscan = OFF;
+SET
+DROP INDEX b_idx;
+DROP INDEX
+DROP INDEX cb_idx;
+DROP INDEX
+EXPLAIN ANALYZE SELECT * FROM r WHERE b > 9 AND c = 10;
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Index Scan using c_idx on r  (cost=0.43..61014.65 rows=57043 width=32) (actual time=0.092..126.953 rows=57040 loops=1)
+   Index Cond: (c = 10)
+   Filter: (b > 9)
+   Rows Removed by Filter: 42960
+ Planning Time: 10.375 ms
+ Execution Time: 128.857 ms
+(6 rows)
+
+ROLLBACK;
+ROLLBACK
+ relname | heap_blks_read | heap_blks_hit | seq_scan | seq_tup_read 
+---------+----------------+---------------+----------+--------------
+ r       |          14688 |             0 |        0 |            0
+(1 row)
+
+ relname | indexrelname | idx_blks_read | idx_blks_hit | idx_scan | idx_tup_read | idx_tup_fetch 
+---------+--------------+---------------+--------------+----------+--------------+---------------
+ r       | r_pkey       |             1 |            0 |        0 |            0 |             0
+ r       | b_idx        |             0 |            0 |        0 |            0 |             0
+ r       | c_idx        |            88 |            0 |        1 |       100000 |        100000
+ r       | cb_idx       |             0 |            0 |        0 |            0 |             0
+(4 rows)
+
+ dropdbbuffers 
+---------------
+ t
+(1 row)
+
+ pg_stat_reset 
+---------------
+ 
+(1 row)
+
+BEGIN;
+BEGIN
+SET enable_bitmapscan = OFF;
+SET
+SET enable_seqscan = OFF;
+SET
+DROP INDEX b_idx;
+DROP INDEX
+DROP INDEX cb_idx;
+DROP INDEX
+EXPLAIN ANALYZE SELECT * FROM r WHERE b > 9 AND c = 10;
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Index Scan using c_idx on r  (cost=0.43..61014.65 rows=57043 width=32) (actual time=0.112..131.657 rows=57040 loops=1)
+   Index Cond: (c = 10)
+   Filter: (b > 9)
+   Rows Removed by Filter: 42960
+ Planning Time: 10.024 ms
+ Execution Time: 133.582 ms
+(6 rows)
+
+ROLLBACK;
+ROLLBACK
+ relname | heap_blks_read | heap_blks_hit | seq_scan | seq_tup_read 
+---------+----------------+---------------+----------+--------------
+ r       |          14688 |             0 |        0 |            0
+(1 row)
+
+ relname | indexrelname | idx_blks_read | idx_blks_hit | idx_scan | idx_tup_read | idx_tup_fetch 
+---------+--------------+---------------+--------------+----------+--------------+---------------
+ r       | r_pkey       |             1 |            0 |        0 |            0 |             0
+ r       | b_idx        |             0 |            0 |        0 |            0 |             0
+ r       | c_idx        |            88 |            0 |        1 |       100000 |        100000
+ r       | cb_idx       |             0 |            0 |        0 |            0 |             0
+(4 rows)
+
+ dropdbbuffers 
+---------------
+ t
+(1 row)
+
+ pg_stat_reset 
+---------------
+ 
+(1 row)
+
+BEGIN;
+BEGIN
+SET enable_bitmapscan = OFF;
+SET
+SET enable_seqscan = OFF;
+SET
+DROP INDEX b_idx;
+DROP INDEX
+DROP INDEX cb_idx;
+DROP INDEX
+EXPLAIN ANALYZE SELECT * FROM r WHERE b > 9 AND c = 10;
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Index Scan using c_idx on r  (cost=0.43..61014.65 rows=57043 width=32) (actual time=0.092..121.955 rows=57040 loops=1)
+   Index Cond: (c = 10)
+   Filter: (b > 9)
+   Rows Removed by Filter: 42960
+ Planning Time: 10.012 ms
+ Execution Time: 123.875 ms
+(6 rows)
+
+ROLLBACK;
+ROLLBACK
+ relname | heap_blks_read | heap_blks_hit | seq_scan | seq_tup_read 
+---------+----------------+---------------+----------+--------------
+ r       |          14688 |             0 |        0 |            0
+(1 row)
+
+ relname | indexrelname | idx_blks_read | idx_blks_hit | idx_scan | idx_tup_read | idx_tup_fetch 
+---------+--------------+---------------+--------------+----------+--------------+---------------
+ r       | r_pkey       |             1 |            0 |        0 |            0 |             0
+ r       | b_idx        |             0 |            0 |        0 |            0 |             0
+ r       | c_idx        |            88 |            0 |        1 |       100000 |        100000
+ r       | cb_idx       |             0 |            0 |        0 |            0 |             0
+(4 rows)
+
+ dropdbbuffers 
+---------------
+ t
+(1 row)
+
+ pg_stat_reset 
+---------------
+ 
+(1 row)
+
+BEGIN;
+BEGIN
+SET enable_bitmapscan = OFF;
+SET
+SET enable_seqscan = OFF;
+SET
+DROP INDEX b_idx;
+DROP INDEX
+DROP INDEX cb_idx;
+DROP INDEX
+EXPLAIN ANALYZE SELECT * FROM r WHERE b > 9 AND c = 10;
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Index Scan using c_idx on r  (cost=0.43..61014.65 rows=57043 width=32) (actual time=0.188..124.938 rows=57040 loops=1)
+   Index Cond: (c = 10)
+   Filter: (b > 9)
+   Rows Removed by Filter: 42960
+ Planning Time: 9.982 ms
+ Execution Time: 127.015 ms
+(6 rows)
+
+ROLLBACK;
+ROLLBACK
+ relname | heap_blks_read | heap_blks_hit | seq_scan | seq_tup_read 
+---------+----------------+---------------+----------+--------------
+ r       |          14688 |             0 |        0 |            0
+(1 row)
+
+ relname | indexrelname | idx_blks_read | idx_blks_hit | idx_scan | idx_tup_read | idx_tup_fetch 
+---------+--------------+---------------+--------------+----------+--------------+---------------
+ r       | r_pkey       |             1 |            0 |        0 |            0 |             0
+ r       | b_idx        |             0 |            0 |        0 |            0 |             0
+ r       | c_idx        |            88 |            0 |        1 |       100000 |        100000
+ r       | cb_idx       |             0 |            0 |        0 |            0 |             0
+(4 rows)
+

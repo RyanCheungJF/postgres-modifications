@@ -1,0 +1,205 @@
+ dropdbbuffers 
+---------------
+ t
+(1 row)
+
+ pg_stat_reset 
+---------------
+ 
+(1 row)
+
+SET enable_seqscan = OFF;
+SET
+SET enable_bitmapscan = OFF;
+SET
+SET enable_indexscan = OFF;
+SET
+SET enable_indexonlyscan = ON;
+SET
+EXPLAIN ANALYZE SELECT b FROM r WHERE c > 15;
+                                                                  QUERY PLAN                                                                  
+----------------------------------------------------------------------------------------------------------------------------------------------
+ Index Only Scan using cb_idx on r  (cost=10000000000.43..10000008361.55 rows=398007 width=8) (actual time=0.763..42.680 rows=400000 loops=1)
+   Index Cond: (c > 15)
+   Heap Fetches: 0
+ Planning Time: 12.127 ms
+ Execution Time: 55.540 ms
+(5 rows)
+
+ relname | heap_blks_read | heap_blks_hit | seq_scan | seq_tup_read 
+---------+----------------+---------------+----------+--------------
+ r       |              1 |             0 |        0 |            0
+(1 row)
+
+ relname | indexrelname | idx_blks_read | idx_blks_hit | idx_scan | idx_tup_read | idx_tup_fetch 
+---------+--------------+---------------+--------------+----------+--------------+---------------
+ r       | r_pkey       |             1 |            0 |        0 |            0 |             0
+ r       | b_idx        |             1 |            0 |        0 |            0 |             0
+ r       | c_idx        |             1 |            0 |        0 |            0 |             0
+ r       | cb_idx       |           352 |            0 |        1 |       400000 |             0
+(4 rows)
+
+ dropdbbuffers 
+---------------
+ t
+(1 row)
+
+ pg_stat_reset 
+---------------
+ 
+(1 row)
+
+SET enable_seqscan = OFF;
+SET
+SET enable_bitmapscan = OFF;
+SET
+SET enable_indexscan = OFF;
+SET
+SET enable_indexonlyscan = ON;
+SET
+EXPLAIN ANALYZE SELECT b FROM r WHERE c > 15;
+                                                                  QUERY PLAN                                                                  
+----------------------------------------------------------------------------------------------------------------------------------------------
+ Index Only Scan using cb_idx on r  (cost=10000000000.43..10000008361.55 rows=398007 width=8) (actual time=0.869..44.843 rows=400000 loops=1)
+   Index Cond: (c > 15)
+   Heap Fetches: 0
+ Planning Time: 14.028 ms
+ Execution Time: 59.304 ms
+(5 rows)
+
+ relname | heap_blks_read | heap_blks_hit | seq_scan | seq_tup_read 
+---------+----------------+---------------+----------+--------------
+ r       |              1 |             0 |        0 |            0
+(1 row)
+
+ relname | indexrelname | idx_blks_read | idx_blks_hit | idx_scan | idx_tup_read | idx_tup_fetch 
+---------+--------------+---------------+--------------+----------+--------------+---------------
+ r       | r_pkey       |             1 |            0 |        0 |            0 |             0
+ r       | b_idx        |             1 |            0 |        0 |            0 |             0
+ r       | c_idx        |             1 |            0 |        0 |            0 |             0
+ r       | cb_idx       |           352 |            0 |        1 |       400000 |             0
+(4 rows)
+
+ dropdbbuffers 
+---------------
+ t
+(1 row)
+
+ pg_stat_reset 
+---------------
+ 
+(1 row)
+
+SET enable_seqscan = OFF;
+SET
+SET enable_bitmapscan = OFF;
+SET
+SET enable_indexscan = OFF;
+SET
+SET enable_indexonlyscan = ON;
+SET
+EXPLAIN ANALYZE SELECT b FROM r WHERE c > 15;
+                                                                  QUERY PLAN                                                                  
+----------------------------------------------------------------------------------------------------------------------------------------------
+ Index Only Scan using cb_idx on r  (cost=10000000000.43..10000008361.55 rows=398007 width=8) (actual time=1.810..44.730 rows=400000 loops=1)
+   Index Cond: (c > 15)
+   Heap Fetches: 0
+ Planning Time: 13.051 ms
+ Execution Time: 58.080 ms
+(5 rows)
+
+ relname | heap_blks_read | heap_blks_hit | seq_scan | seq_tup_read 
+---------+----------------+---------------+----------+--------------
+ r       |              1 |             0 |        0 |            0
+(1 row)
+
+ relname | indexrelname | idx_blks_read | idx_blks_hit | idx_scan | idx_tup_read | idx_tup_fetch 
+---------+--------------+---------------+--------------+----------+--------------+---------------
+ r       | r_pkey       |             1 |            0 |        0 |            0 |             0
+ r       | b_idx        |             1 |            0 |        0 |            0 |             0
+ r       | c_idx        |             1 |            0 |        0 |            0 |             0
+ r       | cb_idx       |           352 |            0 |        1 |       400000 |             0
+(4 rows)
+
+ dropdbbuffers 
+---------------
+ t
+(1 row)
+
+ pg_stat_reset 
+---------------
+ 
+(1 row)
+
+SET enable_seqscan = OFF;
+SET
+SET enable_bitmapscan = OFF;
+SET
+SET enable_indexscan = OFF;
+SET
+SET enable_indexonlyscan = ON;
+SET
+EXPLAIN ANALYZE SELECT b FROM r WHERE c > 15;
+                                                                  QUERY PLAN                                                                  
+----------------------------------------------------------------------------------------------------------------------------------------------
+ Index Only Scan using cb_idx on r  (cost=10000000000.43..10000008361.55 rows=398007 width=8) (actual time=0.857..43.524 rows=400000 loops=1)
+   Index Cond: (c > 15)
+   Heap Fetches: 0
+ Planning Time: 15.016 ms
+ Execution Time: 56.912 ms
+(5 rows)
+
+ relname | heap_blks_read | heap_blks_hit | seq_scan | seq_tup_read 
+---------+----------------+---------------+----------+--------------
+ r       |              1 |             0 |        0 |            0
+(1 row)
+
+ relname | indexrelname | idx_blks_read | idx_blks_hit | idx_scan | idx_tup_read | idx_tup_fetch 
+---------+--------------+---------------+--------------+----------+--------------+---------------
+ r       | r_pkey       |             1 |            0 |        0 |            0 |             0
+ r       | b_idx        |             1 |            0 |        0 |            0 |             0
+ r       | c_idx        |             1 |            0 |        0 |            0 |             0
+ r       | cb_idx       |           352 |            0 |        1 |       400000 |             0
+(4 rows)
+
+ dropdbbuffers 
+---------------
+ t
+(1 row)
+
+ pg_stat_reset 
+---------------
+ 
+(1 row)
+
+SET enable_seqscan = OFF;
+SET
+SET enable_bitmapscan = OFF;
+SET
+SET enable_indexscan = OFF;
+SET
+SET enable_indexonlyscan = ON;
+SET
+EXPLAIN ANALYZE SELECT b FROM r WHERE c > 15;
+                                                                  QUERY PLAN                                                                  
+----------------------------------------------------------------------------------------------------------------------------------------------
+ Index Only Scan using cb_idx on r  (cost=10000000000.43..10000008361.55 rows=398007 width=8) (actual time=0.925..45.527 rows=400000 loops=1)
+   Index Cond: (c > 15)
+   Heap Fetches: 0
+ Planning Time: 11.891 ms
+ Execution Time: 59.266 ms
+(5 rows)
+
+ relname | heap_blks_read | heap_blks_hit | seq_scan | seq_tup_read 
+---------+----------------+---------------+----------+--------------
+ r       |              1 |             0 |        0 |            0
+(1 row)
+
+ relname | indexrelname | idx_blks_read | idx_blks_hit | idx_scan | idx_tup_read | idx_tup_fetch 
+---------+--------------+---------------+--------------+----------+--------------+---------------
+ r       | r_pkey       |             1 |            0 |        0 |            0 |             0
+ r       | b_idx        |             1 |            0 |        0 |            0 |             0
+ r       | c_idx        |             1 |            0 |        0 |            0 |             0
+ r       | cb_idx       |           352 |            0 |        1 |       400000 |             0
+(4 rows)
+
