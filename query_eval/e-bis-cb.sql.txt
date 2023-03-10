@@ -20,23 +20,23 @@ DROP INDEX c_idx;
 DROP INDEX
 DROP INDEX b_idx;
 DROP INDEX
-EXPLAIN ANALYZE SELECT * FROM r WHERE b = 9 AND c > 1;
+EXPLAIN ANALYZE SELECT * FROM r WHERE b = 1 AND c > 1;
                                                          QUERY PLAN                                                          
 -----------------------------------------------------------------------------------------------------------------------------
- Bitmap Heap Scan on r  (cost=24330.15..40079.73 rows=18105 width=32) (actual time=16.732..94.231 rows=17974 loops=1)
-   Recheck Cond: ((c > 1) AND (b = 9))
-   Heap Blocks: exact=10373
-   ->  Bitmap Index Scan on cb_idx  (cost=0.00..24325.63 rows=18105 width=0) (actual time=15.024..15.024 rows=17974 loops=1)
-         Index Cond: ((c > 1) AND (b = 9))
- Planning Time: 9.898 ms
- Execution Time: 95.068 ms
+ Bitmap Heap Scan on r  (cost=24339.21..39860.13 rows=54328 width=32) (actual time=22.453..187.236 rows=53906 loops=1)
+   Recheck Cond: ((c > 1) AND (b = 1))
+   Heap Blocks: exact=14335
+   ->  Bitmap Index Scan on cb_idx  (cost=0.00..24325.63 rows=54328 width=0) (actual time=19.766..19.768 rows=53906 loops=1)
+         Index Cond: ((c > 1) AND (b = 1))
+ Planning Time: 9.875 ms
+ Execution Time: 189.758 ms
 (7 rows)
 
 ROLLBACK;
 ROLLBACK
  relname | heap_blks_read | heap_blks_hit | seq_scan | seq_tup_read 
 ---------+----------------+---------------+----------+--------------
- r       |          10373 |             0 |        0 |            0
+ r       |          14335 |             0 |        0 |            0
 (1 row)
 
  relname | indexrelname | idx_blks_read | idx_blks_hit | idx_scan | idx_tup_read | idx_tup_fetch 
@@ -44,7 +44,7 @@ ROLLBACK
  r       | r_pkey       |             1 |            0 |        0 |            0 |             0
  r       | b_idx        |             0 |            0 |        0 |            0 |             0
  r       | c_idx        |             0 |            0 |        0 |            0 |             0
- r       | cb_idx       |          1569 |            0 |        1 |        17974 |             0
+ r       | cb_idx       |          1569 |            0 |        1 |        53906 |             0
 (4 rows)
 
  dropdbbuffers 
@@ -69,23 +69,23 @@ DROP INDEX c_idx;
 DROP INDEX
 DROP INDEX b_idx;
 DROP INDEX
-EXPLAIN ANALYZE SELECT * FROM r WHERE b = 9 AND c > 1;
+EXPLAIN ANALYZE SELECT * FROM r WHERE b = 1 AND c > 1;
                                                          QUERY PLAN                                                          
 -----------------------------------------------------------------------------------------------------------------------------
- Bitmap Heap Scan on r  (cost=24330.15..40079.73 rows=18105 width=32) (actual time=17.651..100.858 rows=17974 loops=1)
-   Recheck Cond: ((c > 1) AND (b = 9))
-   Heap Blocks: exact=10373
-   ->  Bitmap Index Scan on cb_idx  (cost=0.00..24325.63 rows=18105 width=0) (actual time=16.036..16.037 rows=17974 loops=1)
-         Index Cond: ((c > 1) AND (b = 9))
- Planning Time: 10.085 ms
- Execution Time: 101.901 ms
+ Bitmap Heap Scan on r  (cost=24339.21..39860.13 rows=54328 width=32) (actual time=23.294..209.380 rows=53906 loops=1)
+   Recheck Cond: ((c > 1) AND (b = 1))
+   Heap Blocks: exact=14335
+   ->  Bitmap Index Scan on cb_idx  (cost=0.00..24325.63 rows=54328 width=0) (actual time=20.555..20.556 rows=53906 loops=1)
+         Index Cond: ((c > 1) AND (b = 1))
+ Planning Time: 9.895 ms
+ Execution Time: 211.872 ms
 (7 rows)
 
 ROLLBACK;
 ROLLBACK
  relname | heap_blks_read | heap_blks_hit | seq_scan | seq_tup_read 
 ---------+----------------+---------------+----------+--------------
- r       |          10373 |             0 |        0 |            0
+ r       |          14335 |             0 |        0 |            0
 (1 row)
 
  relname | indexrelname | idx_blks_read | idx_blks_hit | idx_scan | idx_tup_read | idx_tup_fetch 
@@ -93,7 +93,7 @@ ROLLBACK
  r       | r_pkey       |             1 |            0 |        0 |            0 |             0
  r       | b_idx        |             0 |            0 |        0 |            0 |             0
  r       | c_idx        |             0 |            0 |        0 |            0 |             0
- r       | cb_idx       |          1569 |            0 |        1 |        17974 |             0
+ r       | cb_idx       |          1569 |            0 |        1 |        53906 |             0
 (4 rows)
 
  dropdbbuffers 
@@ -118,23 +118,23 @@ DROP INDEX c_idx;
 DROP INDEX
 DROP INDEX b_idx;
 DROP INDEX
-EXPLAIN ANALYZE SELECT * FROM r WHERE b = 9 AND c > 1;
+EXPLAIN ANALYZE SELECT * FROM r WHERE b = 1 AND c > 1;
                                                          QUERY PLAN                                                          
 -----------------------------------------------------------------------------------------------------------------------------
- Bitmap Heap Scan on r  (cost=24330.15..40079.73 rows=18105 width=32) (actual time=17.362..102.856 rows=17974 loops=1)
-   Recheck Cond: ((c > 1) AND (b = 9))
-   Heap Blocks: exact=10373
-   ->  Bitmap Index Scan on cb_idx  (cost=0.00..24325.63 rows=18105 width=0) (actual time=15.749..15.750 rows=17974 loops=1)
-         Index Cond: ((c > 1) AND (b = 9))
- Planning Time: 9.974 ms
- Execution Time: 103.716 ms
+ Bitmap Heap Scan on r  (cost=24339.21..39860.13 rows=54328 width=32) (actual time=22.908..204.570 rows=53906 loops=1)
+   Recheck Cond: ((c > 1) AND (b = 1))
+   Heap Blocks: exact=14335
+   ->  Bitmap Index Scan on cb_idx  (cost=0.00..24325.63 rows=54328 width=0) (actual time=20.236..20.237 rows=53906 loops=1)
+         Index Cond: ((c > 1) AND (b = 1))
+ Planning Time: 10.171 ms
+ Execution Time: 207.002 ms
 (7 rows)
 
 ROLLBACK;
 ROLLBACK
  relname | heap_blks_read | heap_blks_hit | seq_scan | seq_tup_read 
 ---------+----------------+---------------+----------+--------------
- r       |          10373 |             0 |        0 |            0
+ r       |          14335 |             0 |        0 |            0
 (1 row)
 
  relname | indexrelname | idx_blks_read | idx_blks_hit | idx_scan | idx_tup_read | idx_tup_fetch 
@@ -142,7 +142,7 @@ ROLLBACK
  r       | r_pkey       |             1 |            0 |        0 |            0 |             0
  r       | b_idx        |             0 |            0 |        0 |            0 |             0
  r       | c_idx        |             0 |            0 |        0 |            0 |             0
- r       | cb_idx       |          1569 |            0 |        1 |        17974 |             0
+ r       | cb_idx       |          1569 |            0 |        1 |        53906 |             0
 (4 rows)
 
  dropdbbuffers 
@@ -167,23 +167,23 @@ DROP INDEX c_idx;
 DROP INDEX
 DROP INDEX b_idx;
 DROP INDEX
-EXPLAIN ANALYZE SELECT * FROM r WHERE b = 9 AND c > 1;
+EXPLAIN ANALYZE SELECT * FROM r WHERE b = 1 AND c > 1;
                                                          QUERY PLAN                                                          
 -----------------------------------------------------------------------------------------------------------------------------
- Bitmap Heap Scan on r  (cost=24330.15..40079.73 rows=18105 width=32) (actual time=17.162..94.550 rows=17974 loops=1)
-   Recheck Cond: ((c > 1) AND (b = 9))
-   Heap Blocks: exact=10373
-   ->  Bitmap Index Scan on cb_idx  (cost=0.00..24325.63 rows=18105 width=0) (actual time=15.352..15.352 rows=17974 loops=1)
-         Index Cond: ((c > 1) AND (b = 9))
- Planning Time: 10.042 ms
- Execution Time: 95.411 ms
+ Bitmap Heap Scan on r  (cost=24339.21..39860.13 rows=54328 width=32) (actual time=23.423..207.144 rows=53906 loops=1)
+   Recheck Cond: ((c > 1) AND (b = 1))
+   Heap Blocks: exact=14335
+   ->  Bitmap Index Scan on cb_idx  (cost=0.00..24325.63 rows=54328 width=0) (actual time=20.353..20.354 rows=53906 loops=1)
+         Index Cond: ((c > 1) AND (b = 1))
+ Planning Time: 9.781 ms
+ Execution Time: 209.811 ms
 (7 rows)
 
 ROLLBACK;
 ROLLBACK
  relname | heap_blks_read | heap_blks_hit | seq_scan | seq_tup_read 
 ---------+----------------+---------------+----------+--------------
- r       |          10373 |             0 |        0 |            0
+ r       |          14335 |             0 |        0 |            0
 (1 row)
 
  relname | indexrelname | idx_blks_read | idx_blks_hit | idx_scan | idx_tup_read | idx_tup_fetch 
@@ -191,7 +191,7 @@ ROLLBACK
  r       | r_pkey       |             1 |            0 |        0 |            0 |             0
  r       | b_idx        |             0 |            0 |        0 |            0 |             0
  r       | c_idx        |             0 |            0 |        0 |            0 |             0
- r       | cb_idx       |          1569 |            0 |        1 |        17974 |             0
+ r       | cb_idx       |          1569 |            0 |        1 |        53906 |             0
 (4 rows)
 
  dropdbbuffers 
@@ -216,23 +216,23 @@ DROP INDEX c_idx;
 DROP INDEX
 DROP INDEX b_idx;
 DROP INDEX
-EXPLAIN ANALYZE SELECT * FROM r WHERE b = 9 AND c > 1;
+EXPLAIN ANALYZE SELECT * FROM r WHERE b = 1 AND c > 1;
                                                          QUERY PLAN                                                          
 -----------------------------------------------------------------------------------------------------------------------------
- Bitmap Heap Scan on r  (cost=24330.15..40079.73 rows=18105 width=32) (actual time=16.158..91.063 rows=17974 loops=1)
-   Recheck Cond: ((c > 1) AND (b = 9))
-   Heap Blocks: exact=10373
-   ->  Bitmap Index Scan on cb_idx  (cost=0.00..24325.63 rows=18105 width=0) (actual time=14.563..14.564 rows=17974 loops=1)
-         Index Cond: ((c > 1) AND (b = 9))
- Planning Time: 9.904 ms
- Execution Time: 91.891 ms
+ Bitmap Heap Scan on r  (cost=24339.21..39860.13 rows=54328 width=32) (actual time=24.983..207.490 rows=53906 loops=1)
+   Recheck Cond: ((c > 1) AND (b = 1))
+   Heap Blocks: exact=14335
+   ->  Bitmap Index Scan on cb_idx  (cost=0.00..24325.63 rows=54328 width=0) (actual time=22.313..22.314 rows=53906 loops=1)
+         Index Cond: ((c > 1) AND (b = 1))
+ Planning Time: 9.963 ms
+ Execution Time: 209.960 ms
 (7 rows)
 
 ROLLBACK;
 ROLLBACK
  relname | heap_blks_read | heap_blks_hit | seq_scan | seq_tup_read 
 ---------+----------------+---------------+----------+--------------
- r       |          10373 |             0 |        0 |            0
+ r       |          14335 |             0 |        0 |            0
 (1 row)
 
  relname | indexrelname | idx_blks_read | idx_blks_hit | idx_scan | idx_tup_read | idx_tup_fetch 
@@ -240,6 +240,6 @@ ROLLBACK
  r       | r_pkey       |             1 |            0 |        0 |            0 |             0
  r       | b_idx        |             0 |            0 |        0 |            0 |             0
  r       | c_idx        |             0 |            0 |        0 |            0 |             0
- r       | cb_idx       |          1569 |            0 |        1 |        17974 |             0
+ r       | cb_idx       |          1569 |            0 |        1 |        53906 |             0
 (4 rows)
 

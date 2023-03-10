@@ -18,28 +18,28 @@ DROP INDEX c_idx;
 DROP INDEX
 DROP INDEX cb_idx;
 DROP INDEX
-EXPLAIN ANALYZE SELECT * FROM r WHERE b = 9 AND c > 1;
-                                                      QUERY PLAN                                                       
------------------------------------------------------------------------------------------------------------------------
- Index Scan using b_idx on r  (cost=0.43..48010.39 rows=18105 width=32) (actual time=0.101..74.947 rows=17974 loops=1)
-   Index Cond: (b = 9)
+EXPLAIN ANALYZE SELECT * FROM r WHERE b = 1 AND c > 1;
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Index Scan using b_idx on r  (cost=0.43..59949.56 rows=54328 width=32) (actual time=0.998..118.960 rows=53906 loops=1)
+   Index Cond: (b = 1)
    Filter: (c > 1)
-   Rows Removed by Filter: 2026
- Planning Time: 12.111 ms
- Execution Time: 75.660 ms
+   Rows Removed by Filter: 6094
+ Planning Time: 9.985 ms
+ Execution Time: 120.751 ms
 (6 rows)
 
 ROLLBACK;
 ROLLBACK
  relname | heap_blks_read | heap_blks_hit | seq_scan | seq_tup_read 
 ---------+----------------+---------------+----------+--------------
- r       |          10939 |             0 |        0 |            0
+ r       |          14457 |             0 |        0 |            0
 (1 row)
 
  relname | indexrelname | idx_blks_read | idx_blks_hit | idx_scan | idx_tup_read | idx_tup_fetch 
 ---------+--------------+---------------+--------------+----------+--------------+---------------
  r       | r_pkey       |             1 |            0 |        0 |            0 |             0
- r       | b_idx        |            21 |            0 |        1 |        20000 |         20000
+ r       | b_idx        |            55 |            0 |        1 |        60000 |         60000
  r       | c_idx        |             0 |            0 |        0 |            0 |             0
  r       | cb_idx       |             0 |            0 |        0 |            0 |             0
 (4 rows)
@@ -64,28 +64,28 @@ DROP INDEX c_idx;
 DROP INDEX
 DROP INDEX cb_idx;
 DROP INDEX
-EXPLAIN ANALYZE SELECT * FROM r WHERE b = 9 AND c > 1;
-                                                      QUERY PLAN                                                       
------------------------------------------------------------------------------------------------------------------------
- Index Scan using b_idx on r  (cost=0.43..48010.39 rows=18105 width=32) (actual time=0.085..72.729 rows=17974 loops=1)
-   Index Cond: (b = 9)
+EXPLAIN ANALYZE SELECT * FROM r WHERE b = 1 AND c > 1;
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Index Scan using b_idx on r  (cost=0.43..59949.56 rows=54328 width=32) (actual time=0.087..110.480 rows=53906 loops=1)
+   Index Cond: (b = 1)
    Filter: (c > 1)
-   Rows Removed by Filter: 2026
- Planning Time: 10.995 ms
- Execution Time: 73.366 ms
+   Rows Removed by Filter: 6094
+ Planning Time: 9.958 ms
+ Execution Time: 113.070 ms
 (6 rows)
 
 ROLLBACK;
 ROLLBACK
  relname | heap_blks_read | heap_blks_hit | seq_scan | seq_tup_read 
 ---------+----------------+---------------+----------+--------------
- r       |          10939 |             0 |        0 |            0
+ r       |          14457 |             0 |        0 |            0
 (1 row)
 
  relname | indexrelname | idx_blks_read | idx_blks_hit | idx_scan | idx_tup_read | idx_tup_fetch 
 ---------+--------------+---------------+--------------+----------+--------------+---------------
  r       | r_pkey       |             1 |            0 |        0 |            0 |             0
- r       | b_idx        |            21 |            0 |        1 |        20000 |         20000
+ r       | b_idx        |            55 |            0 |        1 |        60000 |         60000
  r       | c_idx        |             0 |            0 |        0 |            0 |             0
  r       | cb_idx       |             0 |            0 |        0 |            0 |             0
 (4 rows)
@@ -110,28 +110,28 @@ DROP INDEX c_idx;
 DROP INDEX
 DROP INDEX cb_idx;
 DROP INDEX
-EXPLAIN ANALYZE SELECT * FROM r WHERE b = 9 AND c > 1;
-                                                      QUERY PLAN                                                       
------------------------------------------------------------------------------------------------------------------------
- Index Scan using b_idx on r  (cost=0.43..48010.39 rows=18105 width=32) (actual time=0.104..84.522 rows=17974 loops=1)
-   Index Cond: (b = 9)
+EXPLAIN ANALYZE SELECT * FROM r WHERE b = 1 AND c > 1;
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Index Scan using b_idx on r  (cost=0.43..59949.56 rows=54328 width=32) (actual time=0.150..114.169 rows=53906 loops=1)
+   Index Cond: (b = 1)
    Filter: (c > 1)
-   Rows Removed by Filter: 2026
- Planning Time: 10.086 ms
- Execution Time: 85.177 ms
+   Rows Removed by Filter: 6094
+ Planning Time: 10.032 ms
+ Execution Time: 116.034 ms
 (6 rows)
 
 ROLLBACK;
 ROLLBACK
  relname | heap_blks_read | heap_blks_hit | seq_scan | seq_tup_read 
 ---------+----------------+---------------+----------+--------------
- r       |          10939 |             0 |        0 |            0
+ r       |          14457 |             0 |        0 |            0
 (1 row)
 
  relname | indexrelname | idx_blks_read | idx_blks_hit | idx_scan | idx_tup_read | idx_tup_fetch 
 ---------+--------------+---------------+--------------+----------+--------------+---------------
  r       | r_pkey       |             1 |            0 |        0 |            0 |             0
- r       | b_idx        |            21 |            0 |        1 |        20000 |         20000
+ r       | b_idx        |            55 |            0 |        1 |        60000 |         60000
  r       | c_idx        |             0 |            0 |        0 |            0 |             0
  r       | cb_idx       |             0 |            0 |        0 |            0 |             0
 (4 rows)
@@ -156,28 +156,28 @@ DROP INDEX c_idx;
 DROP INDEX
 DROP INDEX cb_idx;
 DROP INDEX
-EXPLAIN ANALYZE SELECT * FROM r WHERE b = 9 AND c > 1;
-                                                      QUERY PLAN                                                       
------------------------------------------------------------------------------------------------------------------------
- Index Scan using b_idx on r  (cost=0.43..48010.39 rows=18105 width=32) (actual time=0.107..83.338 rows=17974 loops=1)
-   Index Cond: (b = 9)
+EXPLAIN ANALYZE SELECT * FROM r WHERE b = 1 AND c > 1;
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Index Scan using b_idx on r  (cost=0.43..59949.56 rows=54328 width=32) (actual time=0.097..344.103 rows=53906 loops=1)
+   Index Cond: (b = 1)
    Filter: (c > 1)
-   Rows Removed by Filter: 2026
- Planning Time: 10.058 ms
- Execution Time: 83.983 ms
+   Rows Removed by Filter: 6094
+ Planning Time: 9.991 ms
+ Execution Time: 346.023 ms
 (6 rows)
 
 ROLLBACK;
 ROLLBACK
  relname | heap_blks_read | heap_blks_hit | seq_scan | seq_tup_read 
 ---------+----------------+---------------+----------+--------------
- r       |          10939 |             0 |        0 |            0
+ r       |          14457 |             0 |        0 |            0
 (1 row)
 
  relname | indexrelname | idx_blks_read | idx_blks_hit | idx_scan | idx_tup_read | idx_tup_fetch 
 ---------+--------------+---------------+--------------+----------+--------------+---------------
  r       | r_pkey       |             1 |            0 |        0 |            0 |             0
- r       | b_idx        |            21 |            0 |        1 |        20000 |         20000
+ r       | b_idx        |            55 |            0 |        1 |        60000 |         60000
  r       | c_idx        |             0 |            0 |        0 |            0 |             0
  r       | cb_idx       |             0 |            0 |        0 |            0 |             0
 (4 rows)
@@ -202,28 +202,28 @@ DROP INDEX c_idx;
 DROP INDEX
 DROP INDEX cb_idx;
 DROP INDEX
-EXPLAIN ANALYZE SELECT * FROM r WHERE b = 9 AND c > 1;
-                                                      QUERY PLAN                                                       
------------------------------------------------------------------------------------------------------------------------
- Index Scan using b_idx on r  (cost=0.43..48010.39 rows=18105 width=32) (actual time=0.110..77.523 rows=17974 loops=1)
-   Index Cond: (b = 9)
+EXPLAIN ANALYZE SELECT * FROM r WHERE b = 1 AND c > 1;
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Index Scan using b_idx on r  (cost=0.43..59949.56 rows=54328 width=32) (actual time=0.091..113.563 rows=53906 loops=1)
+   Index Cond: (b = 1)
    Filter: (c > 1)
-   Rows Removed by Filter: 2026
- Planning Time: 10.009 ms
- Execution Time: 78.185 ms
+   Rows Removed by Filter: 6094
+ Planning Time: 9.979 ms
+ Execution Time: 115.394 ms
 (6 rows)
 
 ROLLBACK;
 ROLLBACK
  relname | heap_blks_read | heap_blks_hit | seq_scan | seq_tup_read 
 ---------+----------------+---------------+----------+--------------
- r       |          10939 |             0 |        0 |            0
+ r       |          14457 |             0 |        0 |            0
 (1 row)
 
  relname | indexrelname | idx_blks_read | idx_blks_hit | idx_scan | idx_tup_read | idx_tup_fetch 
 ---------+--------------+---------------+--------------+----------+--------------+---------------
  r       | r_pkey       |             1 |            0 |        0 |            0 |             0
- r       | b_idx        |            21 |            0 |        1 |        20000 |         20000
+ r       | b_idx        |            55 |            0 |        1 |        60000 |         60000
  r       | c_idx        |             0 |            0 |        0 |            0 |             0
  r       | cb_idx       |             0 |            0 |        0 |            0 |             0
 (4 rows)
